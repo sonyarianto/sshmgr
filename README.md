@@ -19,4 +19,4 @@ Good for freelancer, DevOps or anyone that handle multiple servers (EC2/dedicate
 
 MIT
 
-Copyright &copy; 2023 Sony Arianto Kurniawan and contributors.
+Copyright &copy; 2023 Sony Arianto Kurniawan <<sony@sony-ak.com>> and contributors.
