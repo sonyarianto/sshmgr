@@ -1,0 +1,30 @@
+{
+  "name": "sshmgr",
+  "version": "0.1.0",
+  "description": "Simple SSH manager for busy people.",
+  "main": "index.js",
+  "scripts": {
+    "start": "jiti ./src/index.ts",
+    "build": "tsup ./src/"
+  },
+  "bin": {
+    "sshmgr": "./dist/index.js"
+  },
+  "keywords": [
+    "ssh",
+    "manager",
+    "connection",
+    "server"
+  ],
+  "author": "Sony Arianto Kurniawan <sony@sony-ak.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@clack/prompts": "^0.6.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.3",
+    "jiti": "^1.18.2",
+    "prettier": "^2.8.4",
+    "tsup": "^6.7.0"
+  }
+}
