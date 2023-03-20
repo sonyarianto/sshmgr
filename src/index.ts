@@ -2,7 +2,8 @@
 
 import path from "path";
 import fs from "fs";
-import { intro, outro } from "@clack/prompts";
+import { intro, outro, text, select } from "@clack/prompts";
+import color from "picocolors";
 
 const VERSION = "0.1.0";
 const [, , command, ...args] = process.argv;
@@ -33,26 +34,27 @@ function readConfig() {
 }
 
 async function main() {
-  intro(`sshmgr v${VERSION}`);
+  intro(`${color.bgCyan(color.black(" sshmgr "))} v${VERSION}`);
 
   config = readConfig();
 
-  switch (command) {
-    case "add":
-      console.log("add");
-      break;
-    case "rm":
-      console.log("remove");
-      break;
-    case "edit":
-      console.log("edit");
-      break;
-    default:
-      console.log("default");
+  const selectedMenu = select({
+    message: "What do you want to do?",
+    initialValue: "list",
+    options: [
+      { value: "list", label: "List connections" },
+      { value: "add", label: "Add connection" },
+      { value: "edit", label: "Edit connection" },
+      { value: "rm", label: "Remove connection" },
+      { value: "quit", label: "Quit" },
+    ],
+  });
+
+  switch (await selectedMenu) {
+    case "quit":
+      outro(`Thank you for using sshmgr!`);
       break;
   }
-
-  outro(`Thank you for using sshmgr!`);
 }
 
 main();
