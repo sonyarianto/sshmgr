@@ -33,9 +33,58 @@ function readConfig() {
   }
 }
 
+function isValidHostname(hostname: string) {
+  return (
+    hostname.includes(".") &&
+    !hostname.startsWith(".") &&
+    !hostname.endsWith(".") &&
+    hostname.includes("@")
+  );
+}
+
+async function addConnection() {
+  const username = await text({
+    message: "Username",
+    placeholder: "user",
+    validate: (value) => {
+      if (value === "") return "Username cannot be empty";
+    },
+  });
+
+  if (isCancel(username)) {
+    quit();
+  }
+
+  const hostname = await text({
+    message: "Hostname",
+    placeholder: "example.com",
+    validate: (value) => {
+      if (value === "") return "Hostname cannot be empty";
+      if (!isValidHostname(value)) return "Hostname is invalid";
+    },
+  });
+
+  if (isCancel(hostname)) {
+    quit();
+  }
+
+  const port = await text({
+    message: "Port",
+    placeholder: "22",
+    validate: (value) => {
+      if (value === "") return "Port cannot be empty";
+      if (isNaN(Number(value))) return "Port must be a number";
+    },
+  });
+
+  if (isCancel(port)) {
+    quit();
+  }
+}
+
 function quit() {
-    outro(`Thank you for using sshmgr!`);
-    process.exit(0);
+  outro(`Thank you for using sshmgr!`);
+  process.exit(0);
 }
 
 async function main() {
@@ -60,6 +109,9 @@ async function main() {
   }
 
   switch (selectedMenu) {
+    case "add":
+      addConnection();
+      break;
     case "quit":
       quit();
       break;
