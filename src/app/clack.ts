@@ -10,6 +10,7 @@ import { isValidHostname } from "./app";
 import fs from "fs";
 import * as appConfig from "./config";
 import { spawnSync } from "child_process";
+import color from "picocolors";
 
 export async function mainMenu(config: any) {
   const selectedMenu = await select({
@@ -175,7 +176,7 @@ async function removeConnection(config: any) {
 
   fs.writeFileSync(appConfig.CONFIG_FILE_PATH, JSON.stringify(config, null, 2));
 
-  outro(`Connection removed!`);
+  outro(`${color.green(`✓`)} Connection removed!`);
 }
 
 async function addConnection(config: any) {
@@ -240,7 +241,7 @@ async function addConnection(config: any) {
 
   fs.writeFileSync(appConfig.CONFIG_FILE_PATH, JSON.stringify(config, null, 2));
 
-  outro(`Connection added!`);
+  outro(`${color.green(`✓`)} Connection added!`);
 }
 
 async function editConnection(config: any) {
@@ -345,7 +346,7 @@ async function editConnection(config: any) {
 
   fs.writeFileSync(appConfig.CONFIG_FILE_PATH, JSON.stringify(config, null, 2));
 
-  outro(`Connection edited!`);
+  outro(`${color.green(`✓`)} Connection edited!`);
 }
 
 export function quit() {
