@@ -2,7 +2,7 @@
 
 import path from "path";
 import fs from "fs";
-import { intro, outro, text, select } from "@clack/prompts";
+import { intro, outro, text, select, isCancel } from "@clack/prompts";
 import color from "picocolors";
 
 const VERSION = "0.1.0";
@@ -33,26 +33,35 @@ function readConfig() {
   }
 }
 
+function quit() {
+    outro(`Thank you for using sshmgr!`);
+    process.exit(0);
+}
+
 async function main() {
   intro(`${color.bgCyan(color.black(" sshmgr "))} v${VERSION}`);
 
   config = readConfig();
 
-  const selectedMenu = select({
-    message: "What do you want to do?",
+  const selectedMenu = await select({
+    message: "What do you want to do with SSH connections?",
     initialValue: "list",
     options: [
-      { value: "list", label: "List connections" },
-      { value: "add", label: "Add connection" },
-      { value: "edit", label: "Edit connection" },
-      { value: "rm", label: "Remove connection" },
+      { value: "list", label: "List" },
+      { value: "add", label: "Add" },
+      { value: "edit", label: "Edit" },
+      { value: "rm", label: "Remove" },
       { value: "quit", label: "Quit" },
     ],
   });
 
-  switch (await selectedMenu) {
+  if (isCancel(selectedMenu)) {
+    quit();
+  }
+
+  switch (selectedMenu) {
     case "quit":
-      outro(`Thank you for using sshmgr!`);
+      quit();
       break;
   }
 }
