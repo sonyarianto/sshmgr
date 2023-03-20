@@ -241,11 +241,17 @@ async function addConnection(config: any) {
 
 async function editConnection(config: any) {
   const connectionOptions = createConnectionOptions(config);
+  connectionOptions.unshift({ value: "back", label: "Back" });
 
   const selectedConnection = await showConnectionOptions(
     connectionOptions,
     "Edit connection:"
   );
+
+  if (selectedConnection === "back") {
+    mainMenu(config);
+    return;
+  }
 
   // find connection
 
