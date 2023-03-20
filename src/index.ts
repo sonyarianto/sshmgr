@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import { intro, outro, text, select, isCancel } from "@clack/prompts";
 import color from "picocolors";
+import { spawnSync } from "child_process";
 
 const VERSION = "0.1.0";
 const [, , command, ...args] = process.argv;
@@ -104,6 +105,53 @@ async function addConnection() {
   outro(`Connection added!`);
 }
 
+async function listConnection() {
+  if (config.connections.length === 0) {
+    outro(`No connection found!`);
+    process.exit(0);
+  }
+
+  // prepare list of connections
+
+  const connections = config.connections.map((connection: any) => {
+    return {
+      value: connection.ssh_user,
+      label: connection.ssh_user,
+    };
+  });
+
+  // show list of connections
+
+  const selectedConnection = await select({
+    message: "Connect to:",
+    options: connections,
+  });
+
+  if (isCancel(selectedConnection)) {
+    quit();
+  }
+
+  // find connection
+
+  const connection = config.connections.find((connection: any) => {
+    return connection.ssh_user === selectedConnection;
+  });
+
+  // prepare SSH command
+
+  let sshCommand = "";
+
+  if (connection.identity_file) {
+    sshCommand = `ssh -i ${connection.identity_file} ${connection.ssh_user}`;
+  } else {
+    sshCommand = `ssh ${connection.ssh_user}`;
+  }
+
+  // spawn SSH process
+
+  spawnSync(sshCommand, { stdio: "inherit", shell: true });
+}
+
 function quit() {
   outro(`Thank you for using sshmgr!`);
   process.exit(0);
@@ -133,6 +181,9 @@ async function main() {
   switch (selectedMenu) {
     case "add":
       addConnection();
+      break;
+    case "list":
+      listConnection();
       break;
     case "quit":
       quit();
