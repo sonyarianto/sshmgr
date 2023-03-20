@@ -2,7 +2,7 @@
 
 import path from "path";
 import fs from "fs";
-import { intro, outro, text, select, isCancel } from "@clack/prompts";
+import { intro, outro, text, select, isCancel, spinner } from "@clack/prompts";
 import color from "picocolors";
 import { spawnSync } from "child_process";
 
@@ -137,19 +137,32 @@ async function listConnection() {
     return connection.ssh_user === selectedConnection;
   });
 
+  // split hostname and port based on ssh_user, split by :
+
+  const [hostname, port] = connection.ssh_user.split(":");
+
   // prepare SSH command
 
   let sshCommand = "";
 
   if (connection.identity_file) {
-    sshCommand = `ssh -i ${connection.identity_file} ${connection.ssh_user}`;
+    sshCommand = `ssh -i ${connection.identity_file} ${hostname} -p ${port}`;
   } else {
-    sshCommand = `ssh ${connection.ssh_user}`;
+    sshCommand = `ssh ${hostname} -p ${port}`;
   }
+
+  // show spinner
+
+  const loading = spinner();
+  loading.start(`Connecting to ${hostname}`);
 
   // spawn SSH process
 
   spawnSync(sshCommand, { stdio: "inherit", shell: true });
+
+  // stop spinner
+
+  loading.stop("Connection closed!");
 }
 
 function quit() {
