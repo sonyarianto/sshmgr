@@ -34,11 +34,8 @@ function readConfig() {
 }
 
 function isValidHostname(hostname: string) {
-  return (
-    hostname.includes(".") &&
-    !hostname.startsWith(".") &&
-    !hostname.endsWith(".") &&
-    hostname.includes("@")
+  return hostname.match(
+    /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/
   );
 }
 
@@ -46,6 +43,7 @@ async function addConnection() {
   const username = await text({
     message: "Username",
     placeholder: "user",
+    defaultValue: "user",
     validate: (value) => {
       if (value === "") return "Username cannot be empty";
     },
@@ -71,8 +69,8 @@ async function addConnection() {
   const port = await text({
     message: "Port",
     placeholder: "22",
+    defaultValue: "22",
     validate: (value) => {
-      if (value === "") return "Port cannot be empty";
       if (isNaN(Number(value))) return "Port must be a number";
     },
   });
@@ -80,6 +78,30 @@ async function addConnection() {
   if (isCancel(port)) {
     quit();
   }
+
+  const identityFile = await text({
+    message: "Identity file",
+    placeholder: "~/.ssh/id_rsa",
+  });
+
+  if (isCancel(identityFile)) {
+    quit();
+  }
+
+  const sshUser = `${username as string}@${hostname as string}:${
+    port as string
+  }`;
+
+  const connection = {
+    ssh_user: sshUser,
+    identity_file: identityFile,
+  };
+
+  config.connections.push(connection);
+
+  fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(config, null, 2));
+
+  outro(`Connection added!`);
 }
 
 function quit() {
