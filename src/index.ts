@@ -2,7 +2,15 @@
 
 import path from "path";
 import fs from "fs";
-import { intro, outro, text, select, isCancel, spinner } from "@clack/prompts";
+import {
+  intro,
+  outro,
+  text,
+  select,
+  isCancel,
+  spinner,
+  confirm,
+} from "@clack/prompts";
 import color from "picocolors";
 import { spawnSync } from "child_process";
 
@@ -105,6 +113,64 @@ async function addConnection() {
   outro(`Connection added!`);
 }
 
+async function removeConnection() {
+  if (config.connections.length === 0) {
+    outro(`No connection found!`);
+    process.exit(0);
+  }
+
+  // prepare list of connections
+
+  const connections = config.connections.map((connection: any) => {
+    return {
+      value: connection.ssh_user,
+      label: connection.ssh_user,
+    };
+  });
+
+  // show list of connections
+
+  const selectedConnection = await select({
+    message: "Remove connection:",
+    options: connections,
+  });
+
+  if (isCancel(selectedConnection)) {
+    quit();
+  }
+
+  // find connection
+
+  const connection = config.connections.find((connection: any) => {
+    return connection.ssh_user === selectedConnection;
+  });
+
+  // confirm removal
+
+  const confirmRemoval = await confirm({
+    message: `Are you sure you want to remove connection to ${connection.ssh_user}?`,
+  });
+
+  if (isCancel(confirmRemoval)) {
+    quit();
+  }
+
+  if (!confirmRemoval) {
+    outro(`Connection not removed!`);
+    process.exit(0);
+  }
+
+  // remove connection
+
+  config.connections = config.connections.filter((connection: any) => {
+    return connection.ssh_user !== selectedConnection;
+  });
+
+  fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(config, null, 2));
+
+  outro(`Connection removed!`);
+}
+
 async function listConnection() {
   if (config.connections.length === 0) {
     outro(`No connection found!`);
@@ -182,7 +248,7 @@ async function main() {
       { value: "list", label: "List" },
       { value: "add", label: "Add" },
       { value: "edit", label: "Edit" },
-      { value: "rm", label: "Remove" },
+      { value: "remove", label: "Remove" },
       { value: "quit", label: "Quit" },
     ],
   });
@@ -197,6 +263,9 @@ async function main() {
       break;
     case "list":
       listConnection();
+      break;
+    case "remove":
+      removeConnection();
       break;
     case "quit":
       quit();
