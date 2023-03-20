@@ -54,9 +54,11 @@ function createConnectionOptions(config: any): any {
   }
 
   const connections = config.connections.map((connection: any) => {
+    const label = `${connection.ssh_user} (${connection.identity_file ? '🔑' : '🔒'})`;
+
     return {
       value: connection.ssh_user,
-      label: connection.ssh_user,
+      label: label,
     };
   });
 
@@ -303,8 +305,8 @@ async function editConnection(config: any) {
 
   const identityFile = await text({
     message: "Identity file",
-    placeholder: connection.identity_file,
-    initialValue: connection.identity_file,
+    placeholder: connection.identity_file ? connection.identity_file : "~/.ssh/id_rsa",
+    initialValue: connection.identity_file ? connection.identity_file : null,
   });
 
   if (isCancel(identityFile)) {
@@ -328,16 +330,12 @@ async function editConnection(config: any) {
 
   // edit connection
 
-  config.connections = config.connections.map((connection: any) => {
-    if (connection.ssh_user === selectedConnection) {
-      return {
-        ssh_user: `${username as string}@${hostname as string}:${
-          port as string
-        }`,
-        identity_file: identityFile,
-      };
-    }
-  });
+  const index = config.connections.findIndex((connection: any) => connection.ssh_user === selectedConnection);
+
+  config.connections[index] = {
+    ssh_user: `${username as string}@${hostname as string}:${port as string}`,
+    identity_file: identityFile,
+  };
 
   fs.writeFileSync(appConfig.CONFIG_FILE_PATH, JSON.stringify(config, null, 2));
 

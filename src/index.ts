@@ -1,18 +1,7 @@
 #! /usr/bin/env node
 
-import path from "path";
-import fs from "fs";
-import {
-  intro,
-  outro,
-  text,
-  select,
-  isCancel,
-  spinner,
-  confirm,
-} from "@clack/prompts";
+import { intro } from "@clack/prompts";
 import color from "picocolors";
-import { spawnSync } from "child_process";
 import { readConfig } from "./app/app";
 import * as appConfig from "./app/config";
 import { mainMenu } from "./app/clack";
