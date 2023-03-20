@@ -13,264 +13,161 @@ import {
 } from "@clack/prompts";
 import color from "picocolors";
 import { spawnSync } from "child_process";
+import { readConfig } from "./app/app";
+import * as appConfig from "./app/config";
+import { mainMenu } from "./app/clack";
 
-const VERSION = "0.1.0";
 const [, , command, ...args] = process.argv;
-const DATA_FILE_NAME = ".sshmgr.config.json";
-const DATA_FILE_PATH = path.join(
-  process.env.HOME || process.env.USERPROFILE || "",
-  DATA_FILE_NAME
-);
-const emptyConfig = { connections: [] };
-let config: any = null;
+let dataConfig: any = null;
 
-function readConfig() {
-  // check if data file exists
+// function readConfig() {
+//   // check if data file exists
 
-  try {
-    // file exists
+//   try {
+//     // file exists
 
-    fs.accessSync(DATA_FILE_PATH, fs.constants.F_OK);
-    config = JSON.parse(fs.readFileSync(DATA_FILE_PATH, "utf8"));
-    return config;
-  } catch (err) {
-    // file does not exist
+//     fs.accessSync(DATA_FILE_PATH, fs.constants.F_OK);
+//     config = JSON.parse(fs.readFileSync(DATA_FILE_PATH, "utf8"));
+//     return config;
+//   } catch (err) {
+//     // file does not exist
 
-    fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(emptyConfig, null, 2));
-    config = emptyConfig;
-    return config;
-  }
-}
+//     fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(emptyConfig, null, 2));
+//     config = emptyConfig;
+//     return config;
+//   }
+// }
 
-function isValidHostname(hostname: string) {
-  return hostname.match(
-    /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/
-  );
-}
+// async function editConnection() {
+//   if (config.connections.length === 0) {
+//     outro(`No connection found!`);
+//     process.exit(0);
+//   }
 
-async function addConnection() {
-  const username = await text({
-    message: "Username",
-    placeholder: "user",
-    defaultValue: "user",
-    validate: (value) => {
-      if (value === "") return "Username cannot be empty";
-    },
-  });
+//   // prepare list of connections
 
-  if (isCancel(username)) {
-    quit();
-  }
+//   const connections = config.connections.map((connection: any) => {
+//     return {
+//       value: connection.ssh_user,
+//       label: connection.ssh_user,
+//     };
+//   });
 
-  const hostname = await text({
-    message: "Hostname",
-    placeholder: "example.com",
-    validate: (value) => {
-      if (value === "") return "Hostname cannot be empty";
-      if (!isValidHostname(value)) return "Hostname is invalid";
-    },
-  });
+//   // show list of connections
 
-  if (isCancel(hostname)) {
-    quit();
-  }
+//   const selectedConnection = await select({
+//     message: "Edit connection:",
+//     options: connections,
+//   });
 
-  const port = await text({
-    message: "Port",
-    placeholder: "22",
-    defaultValue: "22",
-    validate: (value) => {
-      if (isNaN(Number(value))) return "Port must be a number";
-    },
-  });
+//   if (isCancel(selectedConnection)) {
+//     quit();
+//   }
 
-  if (isCancel(port)) {
-    quit();
-  }
+//   // find connection
 
-  const identityFile = await text({
-    message: "Identity file",
-    placeholder: "~/.ssh/id_rsa",
-  });
+//   const connection = config.connections.find((connection: any) => {
+//     return connection.ssh_user === selectedConnection;
+//   });
 
-  if (isCancel(identityFile)) {
-    quit();
-  }
+//   // edit connection
 
-  const sshUser = `${username as string}@${hostname as string}:${
-    port as string
-  }`;
+//   const username = await text({
+//     message: "Username",
+//     placeholder: connection.ssh_user.split("@")[0],
+//     initialValue: connection.ssh_user.split("@")[0],
+//     validate: (value) => {
+//       if (value === "") return "Username cannot be empty";
+//     },
+//   });
 
-  const connection = {
-    ssh_user: sshUser,
-    identity_file: identityFile,
-  };
+//   if (isCancel(username)) {
+//     quit();
+//   }
 
-  config.connections.push(connection);
+//   const hostname = await text({
+//     message: "Hostname",
+//     placeholder: connection.ssh_user.split("@")[1].split(":")[0],
+//     initialValue: connection.ssh_user.split("@")[1].split(":")[0],
+//     validate: (value) => {
+//       if (value === "") return "Hostname cannot be empty";
+//       if (!isValidHostname(value)) return "Invalid hostname";
+//     },
+//   });
 
-  fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(config, null, 2));
+//   if (isCancel(hostname)) {
+//     quit();
+//   }
 
-  outro(`Connection added!`);
-}
+//   const port = await text({
+//     message: "Port",
+//     placeholder: connection.ssh_user.split("@")[1].split(":")[1],
+//     initialValue: connection.ssh_user.split("@")[1].split(":")[1],
+//     validate: (value) => {
+//       if (isNaN(Number(value))) return "Port must be a number";
+//     },
+//   });
 
-async function removeConnection() {
-  if (config.connections.length === 0) {
-    outro(`No connection found!`);
-    process.exit(0);
-  }
+//   if (isCancel(port)) {
+//     quit();
+//   }
 
-  // prepare list of connections
+//   const identityFile = await text({
+//     message: "Identity file",
+//     placeholder: connection.identity_file,
+//     initialValue: connection.identity_file,
+//   });
 
-  const connections = config.connections.map((connection: any) => {
-    return {
-      value: connection.ssh_user,
-      label: connection.ssh_user,
-    };
-  });
+//   if (isCancel(identityFile)) {
+//     quit();
+//   }
 
-  // show list of connections
+//   // confirm edit
 
-  const selectedConnection = await select({
-    message: "Remove connection:",
-    options: connections,
-  });
+//   const confirmEdit = await confirm({
+//     message: `Are you sure you want to edit connection to ${connection.ssh_user}?`,
+//   });
 
-  if (isCancel(selectedConnection)) {
-    quit();
-  }
+//   if (isCancel(confirmEdit)) {
+//     quit();
+//   }
 
-  // find connection
+//   if (!confirmEdit) {
+//     outro(`Connection not edited!`);
+//     process.exit(0);
+//   }
 
-  const connection = config.connections.find((connection: any) => {
-    return connection.ssh_user === selectedConnection;
-  });
+//   // edit connection
 
-  // confirm removal
+//   config.connections = config.connections.map((connection: any) => {
+//     if (connection.ssh_user === selectedConnection) {
+//       return {
+//         ssh_user: `${username as string}@${hostname as string}:${
+//           port as string
+//         }`,
+//         identity_file: identityFile,
+//       };
+//     }
+//   });
 
-  const confirmRemoval = await confirm({
-    message: `Are you sure you want to remove connection to ${connection.ssh_user}?`,
-  });
+//   fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(config, null, 2));
 
-  if (isCancel(confirmRemoval)) {
-    quit();
-  }
-
-  if (!confirmRemoval) {
-    outro(`Connection not removed!`);
-    process.exit(0);
-  }
-
-  // remove connection
-
-  config.connections = config.connections.filter((connection: any) => {
-    return connection.ssh_user !== selectedConnection;
-  });
-
-  fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(config, null, 2));
-
-  outro(`Connection removed!`);
-}
-
-async function listConnection() {
-  if (config.connections.length === 0) {
-    outro(`No connection found!`);
-    process.exit(0);
-  }
-
-  // prepare list of connections
-
-  const connections = config.connections.map((connection: any) => {
-    return {
-      value: connection.ssh_user,
-      label: connection.ssh_user,
-    };
-  });
-
-  // show list of connections
-
-  const selectedConnection = await select({
-    message: "Connect to:",
-    options: connections,
-  });
-
-  if (isCancel(selectedConnection)) {
-    quit();
-  }
-
-  // find connection
-
-  const connection = config.connections.find((connection: any) => {
-    return connection.ssh_user === selectedConnection;
-  });
-
-  // split hostname and port based on ssh_user, split by :
-
-  const [hostname, port] = connection.ssh_user.split(":");
-
-  // prepare SSH command
-
-  let sshCommand = "";
-
-  if (connection.identity_file) {
-    sshCommand = `ssh -i ${connection.identity_file} ${hostname} -p ${port}`;
-  } else {
-    sshCommand = `ssh ${hostname} -p ${port}`;
-  }
-
-  // show spinner
-
-  const loading = spinner();
-  loading.start(`Connecting to ${hostname}`);
-
-  // spawn SSH process
-
-  spawnSync(sshCommand, { stdio: "inherit", shell: true });
-
-  // stop spinner
-
-  loading.stop("Connection closed!");
-}
-
-function quit() {
-  outro(`Thank you for using sshmgr!`);
-  process.exit(0);
-}
+//   outro(`Connection edited!`);
+// }
 
 async function main() {
-  intro(`${color.bgCyan(color.black(" sshmgr "))} v${VERSION}`);
+  intro(
+    `${color.bgCyan(color.black(` ${appConfig.APP_NAME} `))} v${
+      appConfig.APP_VERSION
+    }`
+  );
 
-  config = readConfig();
-
-  const selectedMenu = await select({
-    message: "What do you want to do with SSH connections?",
-    initialValue: "list",
-    options: [
-      { value: "list", label: "List" },
-      { value: "add", label: "Add" },
-      { value: "edit", label: "Edit" },
-      { value: "remove", label: "Remove" },
-      { value: "quit", label: "Quit" },
-    ],
+  dataConfig = readConfig({
+    configFilePath: appConfig.CONFIG_FILE_PATH,
+    defaultConfig: appConfig.defaultConfig,
   });
 
-  if (isCancel(selectedMenu)) {
-    quit();
-  }
-
-  switch (selectedMenu) {
-    case "add":
-      addConnection();
-      break;
-    case "list":
-      listConnection();
-      break;
-    case "remove":
-      removeConnection();
-      break;
-    case "quit":
-      quit();
-      break;
-  }
+  mainMenu(dataConfig);
 }
 
 main();
