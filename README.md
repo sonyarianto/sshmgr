@@ -1,2 +1,2 @@
 # sshmgr
-Simple SSH manager for busy people.
+Simple SSH manager for busy and lazy people.
