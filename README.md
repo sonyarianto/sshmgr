@@ -11,6 +11,10 @@ npm i -g sshmgr
 
 now you can call it by type `sshmgr` on your computer.
 
+## Screenshot
+
+![sshmgr](https://github.com/sonyarianto/sshmgr/blob/main/sshmgr.jpg?raw=true&90289382938)
+
 ## Use case
 
 Good for freelancer, DevOps or anyone that handle multiple servers (EC2/dedicated server/VPS). I am my self handle many servers that's why I create this tool.
