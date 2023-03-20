@@ -38,9 +38,9 @@ export async function mainMenu(config: any) {
     case "remove":
       removeConnection(config);
       break;
-    // case "edit":
-    //   editConnection();
-    //   break;
+    case "edit":
+      editConnection(config);
+      break;
     case "quit":
       quit();
       break;
@@ -130,11 +130,17 @@ async function listConnections(config: any) {
 
 async function removeConnection(config: any) {
   const connectionOptions = createConnectionOptions(config);
+  connectionOptions.unshift({ value: "back", label: "Back" });
 
   const selectedConnection = await showConnectionOptions(
     connectionOptions,
     "Remove connection:"
   );
+
+  if (selectedConnection === "back") {
+    mainMenu(config);
+    return;
+  }
 
   // find connection
 
@@ -231,6 +237,105 @@ async function addConnection(config: any) {
   fs.writeFileSync(appConfig.CONFIG_FILE_PATH, JSON.stringify(config, null, 2));
 
   outro(`Connection added!`);
+}
+
+async function editConnection(config: any) {
+  const connectionOptions = createConnectionOptions(config);
+
+  const selectedConnection = await showConnectionOptions(
+    connectionOptions,
+    "Edit connection:"
+  );
+
+  // find connection
+
+  const connection = config.connections.find((connection: any) => {
+    return connection.ssh_user === selectedConnection;
+  });
+
+  // edit connection
+
+  const username = await text({
+    message: "Username",
+    placeholder: connection.ssh_user.split("@")[0],
+    initialValue: connection.ssh_user.split("@")[0],
+    validate: (value) => {
+      if (value === "") return "Username cannot be empty";
+    },
+  });
+
+  if (isCancel(username)) {
+    quit();
+  }
+
+  const hostname = await text({
+    message: "Hostname",
+    placeholder: connection.ssh_user.split("@")[1].split(":")[0],
+    initialValue: connection.ssh_user.split("@")[1].split(":")[0],
+    validate: (value) => {
+      if (value === "") return "Hostname cannot be empty";
+      if (!isValidHostname(value)) return "Invalid hostname";
+    },
+  });
+
+  if (isCancel(hostname)) {
+    quit();
+  }
+
+  const port = await text({
+    message: "Port",
+    placeholder: connection.ssh_user.split("@")[1].split(":")[1],
+    initialValue: connection.ssh_user.split("@")[1].split(":")[1],
+    validate: (value) => {
+      if (isNaN(Number(value))) return "Port must be a number";
+    },
+  });
+
+  if (isCancel(port)) {
+    quit();
+  }
+
+  const identityFile = await text({
+    message: "Identity file",
+    placeholder: connection.identity_file,
+    initialValue: connection.identity_file,
+  });
+
+  if (isCancel(identityFile)) {
+    quit();
+  }
+
+  // confirm edit
+
+  const confirmEdit = await confirm({
+    message: `Are you sure you want to edit connection to ${connection.ssh_user}?`,
+  });
+
+  if (isCancel(confirmEdit)) {
+    quit();
+  }
+
+  if (!confirmEdit) {
+    mainMenu(config);
+    return;
+  }
+
+  // edit connection
+
+  config.connections = config.connections.map((connection: any) => {
+    if (connection.ssh_user === selectedConnection) {
+      return {
+        ssh_user: `${username as string}@${hostname as string}:${
+          port as string
+        }`,
+        identity_file: identityFile,
+      };
+    }
+  });
+
+  fs.writeFileSync(appConfig.CONFIG_FILE_PATH, JSON.stringify(config, null, 2));
+
+  outro(`Connection edited!`);
 }
 
 export function quit() {
