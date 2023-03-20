@@ -13,7 +13,7 @@ now you can call it by type `sshmgr` on your computer.
 
 ## Screenshot
 
-![sshmgr](https://github.com/sonyarianto/sshmgr/blob/main/sshmgr.jpg?raw=true&345345)
+![sshmgr](https://github.com/sonyarianto/sshmgr/blob/main/sshmgr.jpg?raw=true&5793475)
 
 ## Use case
 
