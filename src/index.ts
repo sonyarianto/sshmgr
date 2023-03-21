@@ -7,7 +7,7 @@ import * as appConfig from "./app/config";
 import { mainMenu } from "./app/clack";
 
 const [, , command, ...args] = process.argv;
-let dataConfig: any = null;
+let config: any = null;
 
 async function main() {
   intro(
@@ -16,12 +16,12 @@ async function main() {
     }`
   );
 
-  dataConfig = readConfig({
+  config = readConfig({
     configFilePath: appConfig.CONFIG_FILE_PATH,
     defaultConfig: appConfig.defaultConfig,
   });
 
-  mainMenu(dataConfig);
+  mainMenu(config);
 }
 
 main();
