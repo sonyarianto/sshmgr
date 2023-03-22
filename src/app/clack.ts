@@ -350,6 +350,10 @@ async function editConnection(config: any) {
 }
 
 export function quit() {
-  outro(`🙏 Thank you for using ${appConfig.APP_NAME}!`);
+  outro(
+    `🙏 Thank you for using ${color.bgCyan(
+      color.black(` ${appConfig.APP_NAME} `)
+    )}!`
+  );
   process.exit(0);
 }
