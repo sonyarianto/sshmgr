@@ -29,7 +29,7 @@ now you can call it by type `sshmgr` on your computer.
 
 ## Technical notes
 
-- Config file that store all of your server info is stored on `$HOME` directory on a file called `.sshmgr.config.json`
+- Config file stored on `$HOME` directory on a file called `.sshmgr.config.json`. It will automatically created when not exists.
 
 ## License
 
