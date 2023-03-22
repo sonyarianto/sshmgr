@@ -23,7 +23,7 @@ now you can call it by type `sshmgr` on your computer.
 
 ## Screenshot
 
-![sshmgr](https://github.com/sonyarianto/sshmgr/blob/main/sshmgr.jpg?raw=true&8092183021)
+![sshmgr](https://github.com/sonyarianto/sshmgr/blob/main/sshmgr-0.1.8.jpg?raw=true&02742374)
 
 > 🔑 require private key to login, 🔒 require password to login
 
