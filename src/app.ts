@@ -246,8 +246,12 @@ async function detailsConnection(data: any) {
 
 async function connectionDetails(connection: any) {
   log.info(`Connection URI: ${connection.ssh_user}`);
-  log.info(`Identity file: ${connection.identity_file ? connection.identity_file : "none"}`);
-  
+  log.info(
+    `Identity file: ${
+      connection.identity_file ? connection.identity_file : "none"
+    }`
+  );
+
   const confirmBack = await confirm({
     message: `Back to main menu?`,
   });
