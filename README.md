@@ -27,6 +27,10 @@ now you can call it by type `sshmgr` on your computer.
 
 > 🔑 require private key to login, 🔒 require password to login
 
+## Technical notes
+
+- Config file stored on `$HOME` directory on a file called `.sshmgr.config.json`. It will automatically created when not exists.
+
 ## License
 
 MIT
