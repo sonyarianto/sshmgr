@@ -1,5 +1,8 @@
-<a href="https://paypal.me/sonyarianto?country.x=ID&locale.x=en_US" target="_blank">
+<a href="https://paypal.me/sonyarianto" target="_blank">
  <img alt="Sponsor" src="https://img.shields.io/badge/donate-Paypal-fd8200.svg" />
+</a>
+<a href="https://github.com/sponsors/sonyarianto" target="_blank">
+  <img alt="GitHub Sponsors" src="https://img.shields.io/github/sponsors/sonyarianto">
 </a>
 <a href="https://discord.com/channels/1083266930896535562/1088644871407018055" target="_blank">
   <img alt="Discord" src="https://img.shields.io/discord/1083266930896535562">
@@ -7,8 +10,8 @@
 <a href="https://www.npmjs.com/package/sshmgr" target="_blank">
  <img alt="npm" src="https://img.shields.io/npm/dt/sshmgr">
 </a>
-<a href="https://github.com/sponsors/sonyarianto" target="_blank">
-  <img alt="GitHub Sponsors" src="https://img.shields.io/github/sponsors/sonyarianto">
+<a href="https://www.npmjs.com/package/sshmgr" target="_blank">
+ <img alt="npm" src="https://img.shields.io/npm/v/sshmgr">
 </a>
 
 # sshmgr
