@@ -7,6 +7,9 @@
 <a href="https://www.npmjs.com/package/sshmgr" target="_blank">
  <img alt="npm" src="https://img.shields.io/npm/dt/sshmgr">
 </a>
+<a href="https://github.com/sponsors/sonyarianto" target="_blank">
+  <img alt="GitHub Sponsors" src="https://img.shields.io/github/sponsors/sonyarianto">
+</a>
 
 # sshmgr
 Simple SSH manager for busy and lazy people.
