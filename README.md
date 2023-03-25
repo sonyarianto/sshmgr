@@ -4,6 +4,9 @@
 <a href="https://discord.com/channels/1083266930896535562/1088644871407018055" target="_blank">
   <img alt="Discord" src="https://img.shields.io/discord/1083266930896535562">
 </a>
+<a href="https://www.npmjs.com/package/sshmgr" target="_blank">
+ <img alt="npm" src="https://img.shields.io/npm/dt/sshmgr">
+</a>
 
 # sshmgr
 Simple SSH manager for busy and lazy people.
