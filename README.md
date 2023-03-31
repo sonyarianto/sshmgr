@@ -39,9 +39,7 @@ now you can call it by type `sshmgr` on your computer.
 
 ## Screenshot
 
-![sshmgr](https://github.com/sonyarianto/sshmgr/blob/main/sshmgr-0.2.0.jpg?raw=true&39283)
-
-> 🔑 require private key to login, 🔒 require password to login
+![sshmgr](https://github.com/sonyarianto/sshmgr/blob/main/sshmgr.jpg?raw=true&202303310910)
 
 ## Technical notes
 
