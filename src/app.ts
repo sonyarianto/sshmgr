@@ -9,7 +9,7 @@ import {
   text,
 } from "@clack/prompts";
 import * as appConfig from "./config";
-import { spawnSync } from "child_process";
+import { spawn } from "child_process";
 import color from "picocolors";
 
 let appData: any;
@@ -142,20 +142,9 @@ async function connectToConnection(connection: any) {
     sshCommand = `ssh ${hostname} -p ${port}`;
   }
 
-  // show spinner
+  log.info(`🚀 Connecting to ${hostname}`);
 
-  const loading = spinner();
-  loading.start(`Connecting to ${hostname}`);
-
-  // spawn SSH process
-
-  spawnSync(sshCommand, { stdio: "inherit", shell: true });
-
-  // stop spinner
-
-  loading.stop("Connection closed!");
-
-  quit();
+  spawn(sshCommand, { stdio: "inherit", shell: true });
 }
 
 async function handleEmptyConnectionOptions(data: any) {
