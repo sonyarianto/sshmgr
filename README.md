@@ -25,7 +25,7 @@ If you have many servers to manage, you can use this tool to manage. You can add
 
 ## Features
 
-- Add, remove, edit, and list your servers.
+- Add, remove, edit, list and detail your servers.
 
 ## Installation
 
