@@ -1,12 +1,5 @@
 import fs from "fs";
-import {
-  confirm,
-  isCancel,
-  log,
-  outro,
-  select,
-  text,
-} from "@clack/prompts";
+import { confirm, isCancel, log, outro, select, text } from "@clack/prompts";
 import * as appConfig from "./config";
 import { spawn } from "child_process";
 import color from "picocolors";
