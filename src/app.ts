@@ -141,9 +141,13 @@ async function connectToConnection(connection: any) {
     sshCommand = `ssh ${hostname} -p ${port}`;
   }
 
-  log.info(`🚀 Connecting to ${hostname}`);
+  log.info(`🚀 Connecting to ${hostname}...`);
 
-  spawn(sshCommand, { stdio: "inherit", shell: true });
+  const child = spawn(sshCommand, { stdio: "inherit", shell: true });
+
+  child.on("exit", () => {
+    quit();
+  });
 }
 
 async function handleEmptyConnectionOptions(data: any) {
