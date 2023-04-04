@@ -134,7 +134,7 @@ async function connectToConnection(connection: any) {
     sshCommand = `ssh ${hostname} -p ${port}`;
   }
 
-  log.info(`🚀 Connecting to ${hostname}...`);
+  log.info(`🚀 Connecting to ${hostname}...\n`);
 
   const child = spawn(sshCommand, { stdio: "inherit", shell: true });
 
