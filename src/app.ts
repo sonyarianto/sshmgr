@@ -36,11 +36,11 @@ export async function mainMenu(data: any) {
     message: "What do you want to do with SSH connections?",
     initialValue: data.selectedMainMenuValue,
     options: [
-      { value: "list", label: "List" },
-      { value: "details", label: "Details" },
-      { value: "add", label: "Add" },
-      { value: "edit", label: "Edit" },
-      { value: "remove", label: "Remove" },
+      { value: "list", label: "Connect to..." },
+      { value: "details", label: "Show connection details" },
+      { value: "add", label: "Add new connection" },
+      { value: "edit", label: "Edit connection" },
+      { value: "remove", label: "Remove connection" },
       { value: "quit", label: "Quit" },
     ],
   });
@@ -210,7 +210,7 @@ async function detailsConnection(data: any) {
 
   const selectedConnectionUri = await showConnectionOptions(
     connectionOptions,
-    "See details of:"
+    "Show connection details:"
   );
 
   if (selectedConnectionUri === "back") {
