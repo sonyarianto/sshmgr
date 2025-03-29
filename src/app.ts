@@ -15,7 +15,7 @@ export function readConfig(data: any) {
     // file does not exist
     fs.writeFileSync(
       data.configFilePath,
-      JSON.stringify(data.defaultConfig, null, 2)
+      JSON.stringify(data.defaultConfig, null, 2),
     );
     return data.defaultConfig;
   }
@@ -23,7 +23,7 @@ export function readConfig(data: any) {
 
 function isValidHostname(hostname: string) {
   return hostname.match(
-    /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/
+    /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/,
   );
 }
 
@@ -177,7 +177,7 @@ async function listConnections(data: any) {
 
   const selectedConnectionUri = await showConnectionOptions(
     connectionOptions,
-    "Connect to:"
+    "Connect to:",
   );
 
   if (selectedConnectionUri === "back") {
@@ -210,7 +210,7 @@ async function detailsConnection(data: any) {
 
   const selectedConnectionUri = await showConnectionOptions(
     connectionOptions,
-    "Show connection details:"
+    "Show connection details:",
   );
 
   if (selectedConnectionUri === "back") {
@@ -234,7 +234,7 @@ async function connectionDetails(connection: any) {
   log.info(
     `Identity file: ${
       connection.identity_file ? connection.identity_file : "none"
-    }`
+    }`,
   );
 
   const confirmBack = await confirm({
@@ -267,7 +267,7 @@ async function removeConnection(data: any) {
 
   const selectedConnectionUri = await showConnectionOptions(
     connectionOptions,
-    "Remove connection:"
+    "Remove connection:",
   );
 
   if (selectedConnectionUri === "back") {
@@ -296,12 +296,12 @@ async function removeConnection(data: any) {
   data.config.connections = data.config.connections.filter(
     (connection: any) => {
       return connection.ssh_user !== selectedConnectionUri;
-    }
+    },
   );
 
   fs.writeFileSync(
     appConfig.CONFIG_FILE_PATH,
-    JSON.stringify(data.config, null, 2)
+    JSON.stringify(data.config, null, 2),
   );
 
   log.success(`${color.green(`✓`)} Connection removed!`);
@@ -321,7 +321,7 @@ async function addConnection(data: any) {
       const connectionExists = data.config.connections.find(
         (connection: any) => {
           return connection.name === value;
-        }
+        },
       );
 
       if (connectionExists) return "Connection name already exists";
@@ -406,7 +406,7 @@ async function addConnection(data: any) {
 
   fs.writeFileSync(
     appConfig.CONFIG_FILE_PATH,
-    JSON.stringify(data.config, null, 2)
+    JSON.stringify(data.config, null, 2),
   );
 
   log.success(`${color.green(`✓`)} Connection added!`);
@@ -440,7 +440,7 @@ async function editConnection(data: any) {
 
   const selectedConnectionUri = await showConnectionOptions(
     connectionOptions,
-    "Edit connection:"
+    "Edit connection:",
   );
 
   if (selectedConnectionUri === "back") {
@@ -466,7 +466,7 @@ async function editConnection(data: any) {
       const filteredConnections = data.config.connections.filter(
         (connection: any) => {
           return connection.ssh_user !== selectedConnectionUri;
-        }
+        },
       );
 
       const connectionExists = filteredConnections.find((connection: any) => {
@@ -552,7 +552,7 @@ async function editConnection(data: any) {
   // edit connection
 
   const index = data.config.connections.findIndex(
-    (connection: any) => connection.ssh_user === selectedConnectionUri
+    (connection: any) => connection.ssh_user === selectedConnectionUri,
   );
 
   data.config.connections[index] = {
@@ -563,7 +563,7 @@ async function editConnection(data: any) {
 
   fs.writeFileSync(
     appConfig.CONFIG_FILE_PATH,
-    JSON.stringify(data.config, null, 2)
+    JSON.stringify(data.config, null, 2),
   );
 
   outro(`${color.green(`✓`)} Connection edited!`);
@@ -572,8 +572,8 @@ async function editConnection(data: any) {
 function quit() {
   outro(
     `🙏 Thank you for using ${color.bgCyan(
-      color.black(` ${appConfig.APP_NAME} `)
-    )}!`
+      color.black(` ${appConfig.APP_NAME} `),
+    )}!`,
   );
   process.exit(0);
 }

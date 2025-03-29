@@ -6,6 +6,6 @@ export const APP_VERSION = packageJson.version;
 export const CONFIG_FILE_NAME = ".sshmgr.config.json";
 export const CONFIG_FILE_PATH = path.join(
   process.env.HOME || process.env.USERPROFILE || "",
-  CONFIG_FILE_NAME
+  CONFIG_FILE_NAME,
 );
 export const defaultConfig = { connections: [] };
