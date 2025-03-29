@@ -28,7 +28,7 @@
     "@types/node": "^20.17.28",
     "jiti": "^1.21.7",
     "prettier": "^2.8.8",
-    "tsup": "^6.7.0"
+    "tsup": "^7.1.0"
   },
   "repository": {
     "type": "git",

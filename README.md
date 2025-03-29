@@ -4,8 +4,8 @@
 <a href="https://github.com/sponsors/sonyarianto" target="_blank">
   <img alt="GitHub Sponsors" src="https://img.shields.io/github/sponsors/sonyarianto">
 </a>
-<a href="https://discord.com/channels/1083266930896535562/1088644871407018055" target="_blank">
-  <img alt="Discord" src="https://img.shields.io/discord/1083266930896535562">
+<a href="https://discord.gg/tQ2zgz9b" target="_blank">
+  <img alt="Discord" src="https://img.shields.io/discord/1089563520988893306">
 </a>
 <a href="https://www.npmjs.com/package/sshmgr" target="_blank">
  <img alt="npm" src="https://img.shields.io/npm/dt/sshmgr">
